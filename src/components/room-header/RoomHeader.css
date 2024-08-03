@@ -1,0 +1,23 @@
+.chat-header {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-about {
+    padding-left: 10px;
+}
+
+.m-b-0 {
+    margin-bottom: 0;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.chat-btn {
+    margin-left: 8px;
+}

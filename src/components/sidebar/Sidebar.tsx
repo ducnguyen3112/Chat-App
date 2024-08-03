@@ -5,20 +5,21 @@ import './Sidebar.css';
 
 interface SidebarProps {
     rooms: Room[];
-    onSelectRoom: (contact: Room) => void;
+    onSelectRoom: (room: Room) => void;
     onCreateRoom: (name: string) => Promise<void>;
     onSearchRoom: (keyword: string) => void;
+    username: string;
 }
 
 export interface Room {
-    unread?: number;
     avatar?: string;
     name: string;
     createdDate: number;
     updatedDate: number;
+    unreadCount: Map<string, number>;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({rooms, onSelectRoom, onCreateRoom, onSearchRoom}) => {
+const Sidebar: React.FC<SidebarProps> = ({rooms, onSelectRoom, onCreateRoom, onSearchRoom, username}) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [roomName, setRoomName] = useState('');
 
@@ -42,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({rooms, onSelectRoom, onCreateRoom, onS
 
     const menuItems = rooms.map((room) => ({
         key: room.name, label: (<Space className="room">
-            <Badge count={ room.unread }>
+            <Badge count={ room.unreadCount.get(username) }>
                 <Avatar src={ room.avatar }/>
             </Badge>
             <Space style={ {marginLeft: 8} }>{ room.name }</Space>
