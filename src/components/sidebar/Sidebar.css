@@ -1,0 +1,9 @@
+.sidebar {
+    padding: 16px;
+    height: 100%;
+    border-right: 1px solid #ddd;
+}
+
+.room {
+    height: 60px;
+}
