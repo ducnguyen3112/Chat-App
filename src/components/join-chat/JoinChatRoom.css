@@ -1,0 +1,15 @@
+.join-chat-room-layout {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f2f5;
+}
+
+.join-chat-room-content {
+    width: 100%;
+    padding: 24px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
