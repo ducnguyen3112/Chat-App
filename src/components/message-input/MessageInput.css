@@ -1,4 +1,19 @@
 .message-input {
-    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.upload-list-inline {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
     border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.message-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
