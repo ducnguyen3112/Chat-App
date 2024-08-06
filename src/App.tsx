@@ -1,7 +1,8 @@
-import { ConfigProvider, Layout } from 'antd';
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
 import JoinChatRoom from './components/join-chat/JoinChatRoom';
+import VideoCall from './components/video-call/VideoCall';
 import ChatRoom from './pages/chat-room/ChatRoom';
 
 const App: React.FC = () => {
@@ -17,23 +18,11 @@ const App: React.FC = () => {
         setUsername(name);
     };
 
-    return <ConfigProvider
-        theme={ {
-            components: {
-                Menu: {
-                    activeBarBorderWidth: 0, itemHeight: 60,
-                },
-            },
-        } }
-    >
-        <Layout>
-            { !username ? (
-                <JoinChatRoom onJoin={ handleJoin }/>
-            ) : (
-                <ChatRoom username={ username }/>
-            ) }
-        </Layout>
-    </ConfigProvider>;
+    return <Routes>
+        <Route path="/"
+               element={ username ? <ChatRoom username={ username }/> : <JoinChatRoom onJoin={ handleJoin }/> }/>
+        <Route path="/video-calling/:roomId" element={ <VideoCall/> }></Route>
+    </Routes>;
 };
 
 export default App;

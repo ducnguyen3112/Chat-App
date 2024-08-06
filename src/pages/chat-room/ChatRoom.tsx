@@ -1,4 +1,4 @@
-import { Flex, Layout, message, Typography, UploadFile } from 'antd';
+import { ConfigProvider, Flex, Layout, message, Typography, UploadFile } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 import { formatDistanceToNow } from 'date-fns';
@@ -128,10 +128,10 @@ const ChatRoom: React.FC<ChatRoomProps> = ({username}) => {
             if (files.length > 0) {
                 for (const file of files) {
                     const storageRef = ref(storage, uuid());
-                    if (file && file.originFileObj) {
+                    if (file?.originFileObj) {
                         const fileData = await file.originFileObj.arrayBuffer();
                         const uploadTask = uploadBytesResumable(storageRef, fileData, {
-                            contentType: file.type || file.originFileObj.type,
+                            contentType: file.type ?? file.originFileObj.type,
                             customMetadata: {
                                 fileName: file.name,
                             },
@@ -200,33 +200,43 @@ const ChatRoom: React.FC<ChatRoomProps> = ({username}) => {
     };
 
     return (
-        <Layout className={ 'chat-room' }>
-            <Sider width={ 400 } theme={ 'light' }>
-                <Sidebar
-                    rooms={ rooms }
-                    onCreateRoom={ handleCreateRoom }
-                    onSelectRoom={ handleSelectRoom }
-                    onSearchRoom={ handleSearchRoom }
-                    username={ username }
-                />
-            </Sider>
-            <Layout>
-                <Content className={ 'content' }>
-                    { selectedRoom ?
-                        <Flex vertical={ true } className={ 'chat-content' } justify={ 'space-between' }>
-                            <ChatWindow messages={ messages } room={ selectedRoom } username={ username }/>
-                            <MessageInput onSend={ handleSend }/>
-                        </Flex> :
-                        <Flex vertical={ true } justify="center" align="middle" className={ 'welcome' }>
-                            <Typography.Title level={ 1 } className={ 'welcome-title' }>Welcome
-                                back, { username }!</Typography.Title>
-                            <Typography.Text className={ 'welcome-text' }>Choose a room to start
-                                chatting.</Typography.Text>
-                        </Flex>
-                    }
-                </Content>
+        <ConfigProvider
+            theme={ {
+                components: {
+                    Menu: {
+                        activeBarBorderWidth: 0, itemHeight: 60,
+                    },
+                },
+            } }
+        >
+            <Layout className={ 'chat-room' }>
+                <Sider width={ 400 } theme={ 'light' }>
+                    <Sidebar
+                        rooms={ rooms }
+                        onCreateRoom={ handleCreateRoom }
+                        onSelectRoom={ handleSelectRoom }
+                        onSearchRoom={ handleSearchRoom }
+                        username={ username }
+                    />
+                </Sider>
+                <Layout>
+                    <Content className={ 'content' }>
+                        { selectedRoom ?
+                            <Flex vertical={ true } className={ 'chat-content' } justify={ 'space-between' }>
+                                <ChatWindow messages={ messages } room={ selectedRoom } username={ username }/>
+                                <MessageInput onSend={ handleSend }/>
+                            </Flex> :
+                            <Flex vertical={ true } justify="center" align="middle" className={ 'welcome' }>
+                                <Typography.Title level={ 1 } className={ 'welcome-title' }>Welcome
+                                    back, { username }!</Typography.Title>
+                                <Typography.Text className={ 'welcome-text' }>Choose a room to start
+                                    chatting.</Typography.Text>
+                            </Flex>
+                        }
+                    </Content>
+                </Layout>
             </Layout>
-        </Layout>
+        </ConfigProvider>
     );
 };
 
