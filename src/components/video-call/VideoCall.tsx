@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import SimplePeer, { Instance } from 'simple-peer';
 import { io } from 'socket.io-client';
 
-const socketUrl = 'http://localhost:5000';
+const socketUrl = process.env.REACT_APP_SOCKET_SERVER ?? 'http://localhost:5000';
 const username = localStorage.getItem('username');
 
 
@@ -15,7 +15,7 @@ const VideoCall: React.FC = () => {
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
     const {roomId} = useParams<string>();
     const peerRef = useRef<Instance | null>(null);
-    
+
 
     const socket = io(socketUrl, {
         auth: {
