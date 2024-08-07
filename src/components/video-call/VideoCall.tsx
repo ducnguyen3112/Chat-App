@@ -15,6 +15,7 @@ const VideoCall: React.FC = () => {
     const remoteVideoRef = useRef<HTMLVideoElement | null>(null);
     const {roomId} = useParams<string>();
     const peerRef = useRef<Instance | null>(null);
+    const [isJoining, setIsJoining] = useState(false);
 
 
     const socket = io(socketUrl, {
@@ -35,7 +36,7 @@ const VideoCall: React.FC = () => {
                 socket.emit('join', {username: username, room: roomId});
 
                 socket.on('user-joined', (socketID: string) => {
-                    console.log('User joined:', socketID);
+                    setIsJoining(true);
                     const peer = new SimplePeer({
                         initiator: true,
                         trickle: false,
@@ -48,9 +49,12 @@ const VideoCall: React.FC = () => {
                     });
 
                     peer.on('stream', (remoteStream) => {
-                        if (remoteVideoRef.current) {
-                            remoteVideoRef.current.srcObject = remoteStream;
-                        }
+                        setIsJoining(false);
+                        setTimeout(() => {
+                            if (remoteVideoRef.current) {
+                                remoteVideoRef.current.srcObject = remoteStream;
+                            }
+                        }, 100);
                     });
                 });
 
@@ -80,7 +84,6 @@ const VideoCall: React.FC = () => {
                 });
 
                 socket.on('user-disconnected', (socketID: string) => {
-                    console.log('User disconnected:', socketID);
                     if (peerRef.current) {
                         peerRef.current.destroy();
                         peerRef.current = null;
@@ -111,14 +114,17 @@ const VideoCall: React.FC = () => {
                 autoPlay
                 muted
                 className="video-card video-card-me"
-            ></video>
-            <Flex className="list-video-call" gap="5px">
-                <video
-                    ref={ remoteVideoRef }
-                    autoPlay
-                    muted
-                    className="video-card"
-                ></video>
+            />
+            <Flex className="list-video-call" gap="5px" vertical={ false }>
+                { isJoining ?
+                    <div className="video-card">Connecting...</div> :
+                    <video
+                        ref={ remoteVideoRef }
+                        autoPlay
+                        muted
+                        className="video-card"
+                    /> }
+
             </Flex>
         </div>
     );
